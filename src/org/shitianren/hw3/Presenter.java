@@ -134,11 +134,6 @@ public class Presenter {
 
 		void setClickAudio(Audio audio);
 
-		//HasDragStartHandlers getImageDragStartHandlers(int row, int col);
-
-		//HasDragOverHandlers getImageDragOverHandlers(int row, int col);
-
-		//HasDropHandlers getImageDropHandlers(int row, int col);
 
 		Image getImage(int row, int col);
 
@@ -156,7 +151,6 @@ public class Presenter {
 
 		void setLoadStatus(String str);
 
-		// void setDraggable();
 
 		void showConnectPanel();
 
@@ -223,8 +217,7 @@ public class Presenter {
 	private boolean choosePromotion = false;
 	private Audio captureAudio;
 	private Audio gameEndAudio;
-	private Audio clickAudio;
-	//private Storage storage = Storage.getLocalStorageIfSupported();
+	private Audio clickAudio
 	private boolean doAnimation = true;
 	public Color myColor;
 	private String myEmail;
@@ -239,7 +232,6 @@ public class Presenter {
 	private Map<String, String> pendingMoveMap = new LinkedHashMap<String, String>();
 	private MatchInfo matchInfo = NullMatchInfo.INSTANCE;
 	
-	// private ChessMessage chessMessage = GWT.create(ChessMessage.class);
 	public Presenter() {
 		myEmail = storage.getFromStorage("email");
 	}
@@ -251,9 +243,6 @@ public class Presenter {
 		myEmail = email;
 	}
 	public void initGamePanel() {
-		// ----------------------------------------------
-
-		// -----------------------------------------------
 
 		loadMatchList();
 		initChessGame();
@@ -276,7 +265,6 @@ public class Presenter {
 
 			@Override
 			public void onChange(ChangeEvent event) {
-				// Window.alert("on change");
 				logger.info(view.getSelectedMatch());
 
 				if (view.getSelectedMatch().isEmpty()) {
@@ -305,18 +293,6 @@ public class Presenter {
 
 		});
 
-		// TODO
-		/*
-		view.getGrid().addTableListener(new TableListener() {
-
-			@Override
-			public void onCellClicked(SourcesTableEvents sender, int row,
-					int cell) {
-				Window.alert("oncellclicked "+row+" "+cell);
-				clickOn(row, cell);
-			}
-		});
-		*/
 		service.connect(new AsyncCallback<PlayerInfo>() {
 
 			@Override
@@ -328,11 +304,6 @@ public class Presenter {
 			@Override
 			public void onSuccess(PlayerInfo result) {
 				Window.alert("Connection Success");
-				/*
-				 * view.setWaitStatus("Welcome" + " " + result.getUsername() +
-				 * "[" + result.getRank() + "]" + " <" + result.getEmail() +
-				 * ">");
-				 */
 				view.setWaitStatus("Welcome" + " " + result.getUsername() + "["
 						+ result.getRank() + "]" + " <" + result.getEmail()
 						+ ">");
@@ -353,8 +324,7 @@ public class Presenter {
 
 						if (message.contains("NewMatch")) {
 							logger.info("new game");
-							// System.out.println("new game " + "user: " +
-							// myEmail);
+
 							String matchId = message.substring(9, message.length() - 1);
 
 							loadMatchList();
@@ -365,25 +335,15 @@ public class Presenter {
 							if (doInvite == false) {
 								String matchId = message.substring(8,
 										message.length() - 1);
-								//logger.info(match);
-								//MatchInfo info = MatchInfo.fromString(match);
-								// Window.alert(chessMessage.invited() + " "
-								// + info.getBlackEmail());
+
 								
 								loadMatchList();
 								//loadMatch(matchId);
 							} else {
 								doInvite = false;
-								// System.out.println("invited game " +
-								// "user: "+ myEmail);
+
 								String matchId = message.substring(8,
 										message.length() - 1);
-								//logger.info(match);
-								//MatchInfo info = MatchInfo.fromString(match);
-								// initChessGame();
-								//matchId = info.getMatchId();
-								//loadMatch(info.getMatchId());
-								// Window.alert(chessMessage.invitationsuccess());
 								loadMatchList();
 								loadMatch(matchId);
 							}
@@ -420,7 +380,6 @@ public class Presenter {
 			}
 		});
 
-		// TODO
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				final int x = i;
@@ -508,7 +467,6 @@ public class Presenter {
 			public void onSuccess(Void result) {
 				loadMatchList();
 				setState(null);
-				// Window.alert(chessMessage.deletesuccess());
 			}
 
 		});
@@ -518,17 +476,15 @@ public class Presenter {
 		Window.alert("invite " + playerEmail);
 		final String email = view.getInvitePlayerText().getText();
 		if (myEmail.equals(email.trim())) {
-			// Window.alert(chessMessage.inviteself());
 			return;
 		}
 		doInvite = true;
 		invitedMatch(email);
-		// initChessGame();
+
 	}
 
 	public void initializeAutoMatch() {
-
-		// Window.alert("auto match init");
+
 		service.autoMatch(new AsyncCallback<Void>() {
 
 			@Override
@@ -540,8 +496,6 @@ public class Presenter {
 			@Override
 			public void onSuccess(Void result) {
 				logger.info("auto matching");
-				// Window.alert("auto match success");
-				// initChessGame();
 			}
 		});
 	}
@@ -550,7 +504,6 @@ public class Presenter {
 		/*
 		 * initialize chess game
 		 */
-		// Window.alert("init chess game");
 
 		captureAudio = createCaptureAudio();
 		view.setCaptureAudio(captureAudio);
@@ -592,7 +545,6 @@ public class Presenter {
 			Move move = abp.findBestMove(state, 10, new Timer(5000));
 
 			logger.info("AI move " + move.toString());
-			//System.out.println("AI move" + move.toString());
 			doAnimation = true;
 			doMove(move);
 			return;
