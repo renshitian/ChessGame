@@ -118,8 +118,6 @@ public class Graphics extends Composite implements View {
 	private Image[][] board = new Image[8][8];
 	private Image[][] promotionBoard = new Image[2][2];
 	private FlowPanel[][] containers = new FlowPanel[8][8];
-	//private String disp = "Choose match to display";
-	//private ChessMessage chessMessage = GWT.create(ChessMessage.class);
 	private PickupDragController[][] dragControllers = new PickupDragController[8][8];
 
 	public Graphics() {
@@ -139,7 +137,6 @@ public class Graphics extends Composite implements View {
 		loadButton.setText("Load");
 		restartButton.setText("Start New Game");
 		showWaitStatus();
-		//hideWaitStatus();
 		showAutoMatchPanel();
 		showInvitePlayer();
 		showGameDisplayPanel();
@@ -168,8 +165,7 @@ public class Graphics extends Composite implements View {
 				}
 				imageContainer.add(image);
 				containers[row][col] = imageContainer;
-				gameGrid.setWidget(row, col, imageContainer);
-				//board[row][col].getElement().setDraggable(Element.DRAGGABLE_TRUE);				
+				gameGrid.setWidget(row, col, imageContainer);				
 				PickupDragController dragController = new PieceDragController(RootPanel.get(),
 						false);
 
@@ -189,15 +185,7 @@ public class Graphics extends Composite implements View {
 		return deleteGameButton;
 	}
 	
-	/*
-	public void setDraggable(){
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				board[row][col].getElement().setDraggable(Element.DRAGGABLE_TRUE);				
-			}
-		}
-	}
-	*/
+
 	
 	public void resetImageObject(){
 		for (int row = 0; row < 8; row++) {
@@ -386,23 +374,7 @@ public class Graphics extends Composite implements View {
 	@Override
 	public void removePromotion() {
 		promotionGrid.setVisible(false);
-		/*
-		promotionBoard[0][0].setResource(gameImages.whiteTile());
-		promotionBoard[0][1].setResource(gameImages.whiteTile());
-		promotionBoard[1][0].setResource(gameImages.whiteTile());
-		promotionBoard[1][1].setResource(gameImages.whiteTile());
-		promotionStatus.setText("");
-		
-		Element element0 = promotionBoard[0][0].getElement();
-		Element element1 = promotionBoard[0][1].getElement();
-		Element element2 = promotionBoard[1][0].getElement();
-		Element element3 = promotionBoard[1][1].getElement();
-		
-		element0.removeClassName(css.highlighted());
-		element1.removeClassName(css.highlighted());
-		element2.removeClassName(css.highlighted());
-		element3.removeClassName(css.highlighted());
-		*/
+
 	}
 
 	@Override
@@ -452,17 +424,7 @@ public class Graphics extends Composite implements View {
 	public void setClickAudio(Audio audio) {
 		simplepanelClick.setWidget(audio);
 	}
-	/*
-	@Override
-	public HasDragOverHandlers getImageDragOverHandlers(int row, int col) {
-		return board[row][col];
-	}
 
-	@Override
-	public HasDropHandlers getImageDropHandlers(int row, int col) {
-		return board[row][col];
-	}
-	*/
 
 	@Override
 	public Image getImage(int row, int col) {
@@ -590,24 +552,20 @@ public class Graphics extends Composite implements View {
 
 	@Override
 	public void makeDraggableFromTo(int fromRow, int fromCol, int toRow,
-			int toCol, final Callback callback) {
-		// TODO Auto-generated method stub
+			int toCol, final Callback callback) {
 		PickupDragController drag = dragControllers[fromRow][fromCol];
 		drag.makeDraggable(board[fromRow][fromCol]);
 
 		drag.registerDropController(new SimpleDropController(board[toRow][toCol]) {
 			@Override
 			public void onDrop(DragContext ctx) {
-				//System.out.println("on drop");
 				callback.execute();
 			}
 		});
 	}
 
 	@Override
-	public void clearDragDrop() {
-		// TODO Auto-generated method stub
-		//System.out.println("clear dragndrop");
+	public void clearDragDrop() {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
 				PickupDragController drag = dragControllers[i][j];
@@ -624,13 +582,11 @@ public class Graphics extends Composite implements View {
 
 	@Override
 	public Image[][] getBoard() {
-		// TODO Auto-generated method stub
 		return board;
 	}
 
 	@Override
-	public void animateMove(Move move, Callback callback) {
-		// TODO Auto-generated method stub
+	public void animateMove(Move move, Callback callback) {
 		MoveAnimation anim = new MoveAnimation(board, move, callback);
 		anim.run(2000);
 	}

@@ -154,7 +154,6 @@ public class ChessGameServiceImpl extends RemoteServiceServlet implements
 					match.getWhitePlayer().setRank(whiteScore);
 					match.getBlackPlayer().setRank(blackScore);
 
-					//ofy().save().entities(match.getWhitePlayer(), match.getBlackPlayer()).now();
 					ofy().save().entity(match.getWhitePlayer()).now();
 					ofy().save().entity(match.getBlackPlayer()).now();
 				}
@@ -190,7 +189,6 @@ public class ChessGameServiceImpl extends RemoteServiceServlet implements
 		match.setState(HistoryParser.state2History(new State()));
 		match.setName(UUID.randomUUID().toString());
 		Match lastMatch = ofy().load().type(Match.class).order("-id").first().get();
-		//final Long id = lastMatch == null ? 1 : lastMatch.getId() + 1;
 		final Long id = matchCount+1;
 		ofy().transact(new VoidWork() {
 			@Override

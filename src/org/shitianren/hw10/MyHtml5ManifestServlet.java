@@ -21,7 +21,6 @@ public class MyHtml5ManifestServlet extends Html5ManifestServletBase {
 	/**
      * 
      */
-	private static final long serialVersionUID = 3480215265307651028L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -74,13 +73,13 @@ public class MyHtml5ManifestServlet extends Html5ManifestServletBase {
 
 			if (moduleNameNonRetina != null && moduleNameRetina != null) {
 
-				// load files for both permutations
+				
 				Set<String> filesForPermutation = getFilesForPermutation(
 						baseUrl, moduleName, moduleNameNonRetina);
 				filesForPermutation.addAll(getFilesForPermutation(baseUrl,
 						moduleName, moduleNameRetina));
 
-				// dynamically write a new manifest..
+				
 				ManifestWriter manifestWriter = new ManifestWriter();
 				String writeManifest = manifestWriter.writeManifest(
 						new HashSet<String>(), filesForPermutation);
@@ -89,10 +88,6 @@ public class MyHtml5ManifestServlet extends Html5ManifestServletBase {
 			}
 		}
 
-		// if we got here we just don`t know the device react with 500 -> no
-		// manifest...
-		System.out.println("module name: "+moduleName);
-		System.out.println("base url: "+baseUrl);
 
 		Iterator<BindingProperty> temp = computedBindings.iterator();
 		while (temp.hasNext()) {
@@ -101,7 +96,7 @@ public class MyHtml5ManifestServlet extends Html5ManifestServletBase {
 			String c = a.getValue();
 			System.out.println(b + ": " + c);
 		}
-		System.out.println("strong name: " + strongName);
+		
 		throw new ServletException("unkown device");
 
 	}

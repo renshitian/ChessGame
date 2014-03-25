@@ -559,41 +559,9 @@ public class Presenter {
 		clickAudio = createClickAudio();
 		view.setClickAudio(clickAudio);
 		doAnimation = true;
-		/*
-		 * if (History.getToken().isEmpty()) state = new State(); else { state =
-		 * HistoryParser.history2State(History.getToken()); }
-		 * 
-		 * System.out.println("before set state in initChess Game state: "+state.
-		 * toString()); setState(state);
-		 * System.out.println("after set state in initChess Game state: "
-		 * +state.toString());
-		 * 
-		 * showPossibleStartPosition();
-		 */
+
 		addRestartButtonListener();
 		view.setRestartButton();
-
-		//addSaveButtonListener();
-		//view.setSaveStatus("save");
-		//addLoadButtonListener();
-		//view.setLoadStatus("Load");
-		//addStorageListItems();
-
-		// History.addValueChangeHandler(this);
-
-		// History.newItem(HistoryParser.state2History(state), false);
-		// showPossibleStartPosition();
-		/*
-		 * chessGameService.sendState(matchId,HistoryParser.state2History(state),
-		 * new AsyncCallback<Void>(){
-		 * 
-		 * @Override public void onFailure(Throwable caught) { }
-		 * 
-		 * @Override public void onSuccess(Void result) { }
-		 * 
-		 * });
-		 */
-		// sendState();
 	}
 
 	private void updateStateInServer() {
@@ -615,7 +583,6 @@ public class Presenter {
 	}
 
 	private void sendState() {
-		// Window.alert("send state");
 		
 		
 		if (!state.getTurn().equals(myColor) && opponentEmail.equals("AI")) {
@@ -643,29 +610,18 @@ public class Presenter {
 		logger.info(pendingMoveMap.toString());
 
 		updateServerState(moveId, token, true);
-		/*
-		 * service.sendState(matchId, HistoryParser.state2History(state), new
-		 * AsyncCallback<Void>() {
-		 * 
-		 * @Override public void onFailure(Throwable caught) {
-		 * logger.log(Level.SEVERE, "error", caught); }
-		 * 
-		 * @Override public void onSuccess(Void result) { logger.log(Level.INFO,
-		 * "state sent"); loadMatchList();
-		 * 
-		 * } });
-		 */
+
 	}
 
 	private void doMove(Move move) {
-		//System.out.println("do move");
+		
 		stateChanger.makeMove(state, move);
-		//stateChanger.makeMove(state, move);
+
 
 		matchInfo.setState(state);
 		matchInfo.setTurnNumber(matchInfo.getTurnNumber() + 1);
 		matchInfo.setTurn(state.getTurn());
-		// TODO also update winner/reason
+		// also update winner/reason
 
 		for (int i = 0; i < matches.size(); i++) {
 			MatchInfo info = matches.get(i);
@@ -677,28 +633,6 @@ public class Presenter {
 		saveMatchesToStorage();
 
 		if (doAnimation) {
-			//System.out.println("Do animation");
-			/*
-			 * Image from = view.getImage(move.getFrom().getRow(),
-			 * move.getFrom().getCol()); Image to =
-			 * view.getImage(move.getTo().getRow(), move.getTo().getCol());
-			 * 
-			 * int fromTop = from.getElement().getAbsoluteTop(); int fromLeft =
-			 * from.getElement().getAbsoluteLeft(); int toTop =
-			 * to.getElement().getAbsoluteTop(); int toLeft =
-			 * to.getElement().getAbsoluteLeft();
-			 * System.out.println("Do animation:"
-			 * +fromTop+" "+fromLeft+" to "+toTop+" "+toLeft); MakeAnimation
-			 * animation = new MakeAnimation(fromTop, fromLeft, toTop, toLeft,
-			 * from); animation.run(2000);
-			 */
-			/*
-			 * MoveAnimation anim = new MoveAnimation(view.getBoard(), move, new
-			 * Callback() {
-			 * 
-			 * @Override public void execute() { afterMove(); } });
-			 * anim.run(500);
-			 */
 			view.animateMove(move, new Callback() {
 				@Override
 				public void execute() {
@@ -706,14 +640,11 @@ public class Presenter {
 					afterMove();
 				}
 			});
-			//System.out.println("finish animation");
+			
 		} else {
 			 setState(state);
-
-			// History.newItem(HistoryParser.state2History(state), false);
 			afterMove();
-			
-			// showPossibleStartPosition();
+		
 		}
 
 		if (state.getGameResult() != null)
@@ -724,13 +655,9 @@ public class Presenter {
 		showPossibleStartPosition();
 		view.removePromotion();
 		doAnimation = true;
-		// sendState();
-		// setState(state);
 	}
 
 	public void afterMove() {
-		//setState(state);
-
 		sendState();
 	}
 
@@ -744,7 +671,6 @@ public class Presenter {
 
 	public void setState(State state) {
 		this.state = state;
-		// System.out.println("set state to user: "+myEmail);
 		if (state == null) {
 			for (int r = 0; r < 8; r++) {
 				for (int c = 0; c < 8; c++) {
@@ -767,17 +693,16 @@ public class Presenter {
 		if (state.getGameResult() != null) {
 			view.setRestartButton();
 		}
-		// view.setDraggable();
+
 		
 
-		// TODO
+
 		view.clearDragDrop();
 		if (state.getTurn().equals(myColor)) {
 			Set<Move> moves = stateExplorer.getPossibleMoves(state);
 			for (Move move : moves) {
 				final Position start = move.getFrom();
 				final Position target = move.getTo();
-				//System.out.println("makeDraggable from: "+ start.toString()+" to "+target.toString());
 				view.makeDraggableFromTo(start.getRow(), start.getCol(),
 						target.getRow(), target.getCol(), new Callback() {
 
@@ -866,8 +791,6 @@ public class Presenter {
 		choosePromotion = false;
 		doAnimation = true;
 		state = new State();
-		// History.newItem(HistoryParser.state2History(state), false);
-		// view.setGameStatus("restart game color: " + state.getTurn());
 		setState(state);
 		showPossibleStartPosition();
 		sendState();
@@ -876,9 +799,6 @@ public class Presenter {
 
 	
 	public void addImageHandlers() {
-		// addDragStartHandlers();
-		// addDropHandler();
-		//System.out.println("add image handler to user "+myEmail);
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				final int i = row;
@@ -888,95 +808,13 @@ public class Presenter {
 						new ClickHandler() {
 							@Override
 							public void onClick(ClickEvent event) {
-								// System.out.println("on click user: "+myEmail);
-								//Window.alert("on click");
 								clickOn(i, j);
 							}
 						});
-				/*
-				view.getImage(row, col).addTouchStartHandler(new TouchStartHandler(){
-					@Override
-					public void onTouchStart(TouchStartEvent event) {
-						Window.alert("Touch start");
-						clickOn(i,j);
-					}
-				});
-				*/
-				//System.out.println("add clickhandler on"+row+" "+col);
 			}
 		}
 		
 	}
-	/*
-	private void addStorageListItems() {
-		for (int i = 0; i < storage.getLength(); i++) {
-			view.getStorageList().addItem(storage.key(i));
-		}
-	}
-	*/
-
-	/*
-	private void addLoadButtonListener() {
-		view.getLoadButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				loadStorage();
-			}
-		});
-	}
-
-	private void addSaveButtonListener() {
-		view.getSaveButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				saveStorage();
-			}
-
-		});
-	}
-	*/
-
-	/*
-	private void saveStorage() {
-		if (storage != null) {
-			String name = view.getNameText().getText();
-			if (name != null && name != "") {
-				boolean flag = false;
-				for (int i = 0; i < storage.getLength(); i++) {
-					if (storage.key(i).equals(name)) {
-						flag = true;
-						break;
-					}
-				}
-				if (flag) {
-					view.setSaveStatus("");
-				} else {
-					String storedState = HistoryParser.state2History(state);
-					storage.setItem(name, storedState);
-					view.getStorageList().addItem(name);
-					view.setSaveStatus("");
-				}
-			} else {
-				view.setSaveStatus("");
-			}
-		}
-	}
-
-	private void loadStorage() {
-		if (storage != null) {
-			ListBox temp = view.getStorageList();
-			String name = temp.getItemText(temp.getSelectedIndex());
-			if (name != null && name != "") {
-				String loadState = storage.getItem(name);
-				state = HistoryParser.history2State(loadState);
-				// setState(state);
-				showPossibleStartPosition();
-				sendState();
-				// History.newItem(HistoryParser.state2History(state), false);
-			}
-		}
-	}
-	*/
 
 	PieceKind promotionTo = null;
 	Set<Move> possibleMoveFromPosition = null;
@@ -989,10 +827,6 @@ public class Presenter {
 		/*
 		 * deal with not user turn
 		 */
-		// System.out.println("click on user: "+myEmail+" row: "+row+" col: "+col);
-		//System.out.println("click on"+row+" "+col);
-
-		//Window.alert("click on"+row+" "+col);
 		if (!state.getTurn().equals(myColor)) {
 			Window.alert("It is not your turn " + myEmail + " Turn: "
 					+ state.getTurn());
@@ -1005,10 +839,7 @@ public class Presenter {
 		tempCurrentPosition = new Position(row, col);
 		Set<Position> possibleStartPosition = stateExplorer
 				.getPossibleStartPositions(state);
-		// Window.alert("click on tempCurrentPosition"+tempCurrentPosition);
-		// System.out.println("click on user: "+myEmail+"current position"+tempCurrentPosition);
 		if (possibleStartPosition.contains(tempCurrentPosition)) {
-			// Window.alert("click on contain possible start position");
 			possibleMoveFromPosition = stateExplorer
 					.getPossibleMovesFromPosition(state, tempCurrentPosition);
 			view.clearHighlighted();
@@ -1075,12 +906,9 @@ public class Presenter {
 
 	public void movePieceInBoard(Position tempCurrentPosition,
 			PieceKind promotionKind) {
-		 //Window.alert("move piece in board");
-		//System.out.println("move piece in board");
 
 		if (currentPossible2Position.contains(new Move(fromPosition,
 				tempCurrentPosition, promotionKind))) {
-			// Window.alert("do move");
 			if (state.getPiece(tempCurrentPosition) != null
 					|| (state.getEnpassantPosition() != null && tempCurrentPosition
 							.equals(state.getEnpassantPosition()))) {
@@ -1089,7 +917,6 @@ public class Presenter {
 
 			Move move = new Move(fromPosition, tempCurrentPosition,
 					promotionKind);
-			//System.out.println("move: "+move.toString());
 			doMove(move);
 			return;
 
@@ -1213,17 +1040,12 @@ public class Presenter {
 
 			@Override
 			public void onSuccess(Void info) {
-				// System.out.println("create match on success matchID: "+info.getMatchId());
-				// logger.info("match created with " + email);
 				loadMatchList();
 			}
 		});
 	}
 
 	private void loadMatch(String matchId) {
-		//this.matchId = matchId;
-		// Window.alert("load match");
-		// System.out.println("load match matchID: "+this.matchId);
 		
 		for (MatchInfo match : matches) {
 			if (match.getMatchId().equals(matchId)) {
@@ -1236,7 +1058,6 @@ public class Presenter {
 			}
 		}
 
-		// send a request for latest state in case ours was stale
 		service.getMatchState( matchId, new AsyncCallback<MatchInfo>() {
 			@Override
 			public void onSuccess(MatchInfo result) {
@@ -1250,7 +1071,6 @@ public class Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -1272,7 +1092,6 @@ public class Presenter {
 			for (String savedMatch : data) {
 				savedMatches.add(MatchInfo.deserialize(savedMatch));
 			}
-			//System.out.println("from storage");
 			processMatchList(savedMatches);
 		}
 
@@ -1281,7 +1100,6 @@ public class Presenter {
 			@Override
 			public void onSuccess(List<MatchInfo> result) {
 				logger.info(result.toString());
-				//System.out.println("from server");
 
 				processMatchList(result);
 				saveMatchesToStorage();
@@ -1290,7 +1108,6 @@ public class Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				
 			}
 
@@ -1355,7 +1172,6 @@ public class Presenter {
 				moveMap.put(data[0], data[1]);
 			}
 		} catch (Exception e) {
-			// do nothing
 		}
 
 		return moveMap;
@@ -1367,21 +1183,15 @@ public class Presenter {
 		String result = "Opponent" + ": ";
 		result += info.getOpponentEmail();
 		result += (" " + "Turn" + ": ");
-		//System.out.println("turn is"+info.getTurn()+info.getMyColor()+info.getOpponentColor());
 		if (info.getTurn().equals(info.getMyColor())) {
-			//System.out.println("turn is "+myEmail+"color is "+info.getMyColor());
 			result += (myEmail);
 		} else{
 			String opEmail = info.getOpponentEmail();
-			//System.out.println("turn is op "+opEmail);
-			//System.out.println("1result:"+result);
 			result += (opEmail);
-			//System.out.println("2result:"+result);
 
 		}
 
 		result += (getDateDescription(info));
-		//System.out.println("3result:"+result);
 		return result;
 	}
 
@@ -1396,7 +1206,6 @@ public class Presenter {
 	}
 
 	private void AIMode() {
-		// initChessGame();
 		createMatch("AI");
 	}
 
